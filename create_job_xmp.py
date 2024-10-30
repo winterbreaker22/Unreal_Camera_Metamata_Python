@@ -60,7 +60,7 @@ def generate_xmp_metadata():
 
     playback_range = seq_asset.get_playback_range()
     start_frame = playback_range.get_start_frame() 
-    end_frame = playback_range.get_end_frame()      # Directly get the end frame as an integer
+    end_frame = playback_range.get_end_frame()     
     frame_rate = seq_asset.get_display_rate()
 
     # Calculate the frame duration in seconds
