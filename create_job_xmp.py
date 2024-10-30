@@ -35,7 +35,7 @@ def generate_xmp_metadata():
     output_setting = job.get_configuration().find_or_add_setting_by_class(unreal.MoviePipelineOutputSetting)
     output_dir = output_setting.output_directory.path  
     file_name_format = output_setting.file_name_format  
-    
+
     # Ensure the output directory exists
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -59,7 +59,7 @@ def generate_xmp_metadata():
         return
 
     playback_range = seq_asset.get_playback_range()
-    start_frame = playback_range.get_start_frame()  # Directly get the start frame as an integer
+    start_frame = playback_range.get_start_frame() 
     end_frame = playback_range.get_end_frame()      # Directly get the end frame as an integer
     frame_rate = seq_asset.get_display_rate()
 
