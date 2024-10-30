@@ -52,7 +52,7 @@ def generate_xmp_metadata():
     for actor in level_actors:
         if isinstance(actor, unreal.CineCameraActor):
             cine_camera_actor = actor
-            break  # Exit loop after finding the first Cine Camera Actor
+            break  
 
     if not cine_camera_actor:
         unreal.log_error("No Cine Camera Actor found in the Level.")
