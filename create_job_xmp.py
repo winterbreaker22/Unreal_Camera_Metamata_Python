@@ -33,7 +33,7 @@ def generate_xmp_metadata():
 
     # Retrieve output settings from the job's configuration
     output_setting = job.get_configuration().find_or_add_setting_by_class(unreal.MoviePipelineOutputSetting)
-    output_dir = output_setting.output_directory.path  # Access the actual directory path
+    output_dir = output_setting.output_directory.path  
     file_name_format = output_setting.file_name_format  # Filename format pattern
 
     # Ensure the output directory exists
