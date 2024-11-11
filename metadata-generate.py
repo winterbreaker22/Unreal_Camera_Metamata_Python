@@ -1,6 +1,7 @@
 import unreal
 import os
 import time
+import math
 
 # Get the current map's full path
 current_map = unreal.EditorLevelLibrary.get_editor_world().get_path_name()
@@ -91,6 +92,20 @@ def generate_xmp_metadata():
         location = transform.translation
         rotation = transform.rotation.euler()
 
+        rx = math.radians(rotation.x)
+        ry = math.radians(rotation.y)
+        rz = math.radians(rotation.z)
+
+        cos_rx, sin_rx = math.cos(rx), math.sin(rx)
+        cos_ry, sin_ry = math.cos(ry), math.sin(ry)
+        cos_rz, sin_rz = math.cos(rz), math.sin(rz)
+
+        rotation_matrix = [
+            [cos_ry * cos_rz, -cos_ry * sin_rz, sin_ry],
+            [sin_rx * sin_ry * cos_rz + cos_rx * sin_rz, -sin_rx * sin_ry * sin_rz + cos_rx * cos_rz, -sin_rx * cos_ry],
+            [-cos_rx * sin_ry * cos_rz + sin_rx * sin_rz, cos_rx * sin_ry * sin_rz + sin_rx * cos_rz, cos_rx * cos_ry]
+        ]
+
         # Generate filename based on the Movie Render Queue format
         frame_number_str = "." + str(frame).zfill(4)
         jpeg_filename = level_sequence.get_name() + frame_number_str + ".jpeg"
@@ -102,14 +117,9 @@ def generate_xmp_metadata():
         <x:xmpmeta xmlns:x='adobe:ns:meta/'>
           <rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
             <rdf:Description rdf:about=''
-                xmlns:exif='http://ns.adobe.com/exif/1.0/'>
-              <exif:GPSLatitude>{location.y}</exif:GPSLatitude>
-              <exif:GPSLongitude>{location.x}</exif:GPSLongitude>
-              <exif:GPSAltitude>{location.z}</exif:GPSAltitude>
-              <exif:Orientation>1</exif:Orientation>
-              <exif:CameraOrientationX>{rotation.x}</exif:CameraOrientationX>
-              <exif:CameraOrientationY>{rotation.y}</exif:CameraOrientationY>
-              <exif:CameraOrientationZ>{rotation.z}</exif:CameraOrientationZ>
+                xmlns:xcr='http://ns.adobe.com/xcr/1.0/'>
+                <xcr:Position>{location.x} {location.y} {location.z}</xcr:Position>
+                <xcr:Rotation>{rotation_matrix[0][0]} {rotation_matrix[0][1]} {rotation_matrix[0][2]} {rotation_matrix[1][0]} {rotation_matrix[1][1]} {rotation_matrix[1][2]} {rotation_matrix[2][0]} {rotation_matrix[2][1]} {rotation_matrix[2][2]}</xcr:Rotation>
               <exif:FocalLength>{fov}</exif:FocalLength>
             </rdf:Description>
           </rdf:RDF>
